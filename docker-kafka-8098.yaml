@@ -1,0 +1,56 @@
+# https://codersee.com/how-to-deploy-multiple-kafka-brokers-with-docker-compose/
+version: '3'
+name: kafkas-in-zoo
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.2
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2182
+    ports:
+      - "2182:2182"
+  kafka1:
+    image: confluentinc/cp-kafka:7.6.2
+    container_name: kafka1
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2182
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: EXTERNAL://localhost:9092,INTERNAL://kafka1:8097
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+    volumes:
+      - D:\Projects\dockervolumes\kafka1:/var/lib/kafka/data  
+  kafka2:
+    image: confluentinc/cp-kafka:7.6.2
+    container_name: kafka2
+    ports:
+      - "9093:9093"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2182
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: EXTERNAL://localhost:9093,INTERNAL://kafka2:8098
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+    volumes:
+      - D:\Projects\dockervolumes\kafka2:/var/lib/kafka/data  
+  kafka3:
+    image: confluentinc/cp-kafka:7.6.2
+    container_name: kafka3
+    ports:
+      - "9094:9094"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2182
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: EXTERNAL://localhost:9094,INTERNAL://kafka3:8099
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+    volumes:
+      - D:\Projects\dockervolumes\kafka3:/var/lib/kafka/data  

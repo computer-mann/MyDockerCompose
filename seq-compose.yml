@@ -1,0 +1,13 @@
+name: seeqing
+services:
+ seq:
+    image: datalust/seq:2024.3
+    container_name: seq
+    restart: no
+    environment:
+      - ACCEPT_EULA=Y
+    volumes:
+      - D:\Projects\dockervolumes\seq:/data
+    ports:
+      - "5341:5341"
+      - "8081:80"

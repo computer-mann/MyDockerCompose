@@ -1,0 +1,73 @@
+version: "3.9"
+name: kafkas-in-zoo
+services:
+  zookeeper:
+    image: docker.io/bitnami/zookeeper:3.9.1
+    container_name: zookeepedkafka
+    ports:
+      - 2181:2181
+    volumes:
+      - D:\Projects\dockervolumes\zookeeperdata:/bitnami
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+  kafka1:
+    image: docker.io/bitnami/kafka:3.6.1
+    container_name: kafkaiszookeeped1
+    ports:
+      - 9093:9093
+    volumes:
+      - D:\Projects\dockervolumes\kafkadata1:/bitnami
+    environment:
+      - KAFKA_BROKER_ID= 1
+      - KAFKA_ZOOKEEPER_CONNECT= zookeeper:2181
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP= EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
+      - KAFKA_ADVERTISED_LISTENERS= EXTERNAL://localhost:9093,INTERNAL://kafka1:9093
+      - KAFKA_INTER_BROKER_LISTENER_NAME= INTERNAL
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT
+    depends_on:
+      - zookeeper
+  kafka2:
+    image: docker.io/bitnami/kafka:3.6.1
+    container_name: kafkaiszookeeped2
+    ports:
+      - 9092:9092
+    volumes:
+      - D:\Projects\dockervolumes\kafkadata2:/bitnami
+    environment:
+      - KAFKA_BROKER_ID= 2
+      - KAFKA_ZOOKEEPER_CONNECT= zookeeper:2181
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP= EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
+      - KAFKA_ADVERTISED_LISTENERS= EXTERNAL://localhost:9092,INTERNAL://kafka1:9092
+      - KAFKA_INTER_BROKER_LISTENER_NAME= INTERNAL
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT
+    depends_on:
+      - zookeeper
+  kafka3:
+    image: docker.io/bitnami/kafka:3.6.1
+    container_name: kafkaiszookeeped3
+    ports:
+      - 9094:9094
+    volumes:
+      - D:\Projects\dockervolumes\kafkadata3:/bitnami
+    environment:
+      - KAFKA_BROKER_ID= 3
+      - KAFKA_ZOOKEEPER_CONNECT= zookeeper:2181
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP= EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
+      - KAFKA_ADVERTISED_LISTENERS= EXTERNAL://localhost:9094,INTERNAL://kafka1:9092
+      - KAFKA_INTER_BROKER_LISTENER_NAME= INTERNAL
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT
+    depends_on:
+      - zookeeper
+
+volumes:
+  zookeeper_data:
+    driver: local
+  kafka_data1:
+    driver: local
+  kafka_data2:
+    driver: local  
+  kafka_data3:
+    driver: local  

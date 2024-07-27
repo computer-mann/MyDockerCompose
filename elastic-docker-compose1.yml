@@ -1,0 +1,49 @@
+version: "2"
+name: personal-elastic
+services:
+  elasticsearch01:
+    image: elasticsearch:8.13.0
+    ports:
+      - "9300:9300"
+      - "9200:9200"
+    environment:
+      discovery.type: single-node
+      http.host: 0.0.0.0
+      transport.host: localhost
+      network.host: 0.0.0.0
+      cluster.name: elasticsearch
+      elasticsearch.ssl.verificationMode: none
+      xpack.security.enabled: false
+    volumes:
+      - ./elasticsearch-data:/usr/share/elasticsearch/data
+    deploy:
+        resources:
+          limits:
+            memory: 1g  
+    networks:
+      - elk
+  kibana:
+    depends_on:
+      - elasticsearch01
+    image: kibana:8.13.0
+    ports:
+      - "5601:5601"
+    volumes:
+      - ./kibana-data:/usr/share/kibana/data
+    environment:
+      SERVER_NAME: kibana
+      ELASTICSEARCH_HOSTS: http://elasticsearch01:9200
+      elasticsearch.ssl.verificationMode: none
+    networks:
+      - elk
+    
+networks:
+  elk:
+    driver: bridge
+  # logstash:
+  #   depends_on:
+  #     - elasticsearch
+  #   image: logstash:8.2.2
+  #   volumes:
+  #     - ./logstash-pipeline:/usr/share/logstash/pipeline
+  #     - ./logstash-data:/usr/share/logstash/data    

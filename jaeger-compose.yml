@@ -1,7 +1,7 @@
 version: "3"
 name: otel-jaeger
 services:
-  redis:
+  jaeger:
     container_name: jaeger
     image: jaegertracing/all-in-one:1.58
     restart: no

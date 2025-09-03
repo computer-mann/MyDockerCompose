@@ -1,0 +1,16 @@
+version: '3.8'
+name: rawmongotest
+services:
+  mongodb:
+    image: mongo:7.0.12
+    container_name: rawmongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: asdfgh
+      MONGO_INITDB_ROOT_PASSWORD: sdfghjk1111323#!
+    volumes:
+      - mongo-data-raw:/data/db
+
+volumes:
+  mongo-data-raw:

@@ -2,7 +2,7 @@ version: "3.9"
 name: kafkas-in-zoo
 services:
   zookeeper:
-    image: docker.io/bitnami/zookeeper:3.9.1
+    image: docker.io/soldevelo/zookeeper:3.9.5
     container_name: zookeepedkafka
     ports:
       - 2181:2181
